@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0.3"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.squareup.picasso:picasso:2.4.0'
+
+}
+group = 'com.wildnet.wrcpicker' // Change this to match your package name
+version = '1.0.3' // Change this to match your version number
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+bintray {
+    user = 'abhilucks93'
+    key = '6cd071ff13696b40b6c7e95a32f0f7f923a80d53'
+    pkg {
+        repo = 'WRC'
+        name = 'WrcContactPicker'
+
+        version {
+            name = '1.0.3'
+            desc = 'Custom Contact Picker'
+            released  = new Date()
+            vcsTag = '1.0.3'
+        }
+
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/abhilucks93/WRC_CONTACT_PICKER.git'
+        websiteUrl = 'https://github.com/abhilucks93/WRC_CONTACT_PICKER'
+    }
+    configurations = ['archives']
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
